@@ -226,6 +226,19 @@ static void __loop_update_dio(struct loop_device *lo, bool dio)
 }
 
 /**
+ * loop_validate_block_size() - validates the passed in block size
+ * @bsize: size to validate
+ */
+static int
+loop_validate_block_size(unsigned short bsize)
+{
+	if (bsize < 512 || bsize > PAGE_SIZE || !is_power_of_2(bsize))
+		return -EINVAL;
+
+	return 0;
+}
+
+/**
  * loop_set_size() - sets device size and notifies userspace
  * @lo: struct loop_device to set the size for
  * @size: new size of the loop device
@@ -983,8 +996,9 @@ loop_set_status_from_info(struct loop_device *lo,
 	return 0;
 }
 
-static int loop_set_fd(struct loop_device *lo, fmode_t mode,
-		       struct block_device *bdev, unsigned int arg)
+static int loop_configure(struct loop_device *lo, fmode_t mode,
+			  struct block_device *bdev,
+			  const struct loop_config *config)
 {
 	struct file	*file;
 	struct inode	*inode;
@@ -1012,6 +1026,8 @@ static int loop_set_fd(struct loop_device *lo, fmode_t mode,
 	mapping = file->f_mapping;
 	inode = mapping->host;
 
+	size = get_loop_size(lo, file);
+
 	if ((config->info.lo_flags & ~LOOP_CONFIGURE_SETTABLE_FLAGS) != 0) {
 		error = -EINVAL;
 		goto out_putf;
@@ -1030,8 +1046,6 @@ static int loop_set_fd(struct loop_device *lo, fmode_t mode,
 	if (!(file->f_mode & FMODE_WRITE) || !(mode & FMODE_WRITE) ||
 	    !file->f_op->write_iter)
 		lo->lo_flags |= LO_FLAGS_READ_ONLY;
-
-	size = get_loop_size(lo, file);
 
 	error = loop_prepare_queue(lo);
 	if (error)
@@ -1062,9 +1076,6 @@ static int loop_set_fd(struct loop_device *lo, fmode_t mode,
 
 	loop_update_dio(lo);
 	loop_sysfs_init(lo);
-	loop_set_size(lo, size);
-
-	size = get_loop_size(lo, file);
 	loop_set_size(lo, size);
 
 	if (config->block_size)
