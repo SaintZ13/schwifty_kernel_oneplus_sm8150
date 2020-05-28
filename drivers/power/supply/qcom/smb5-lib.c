@@ -5612,7 +5612,7 @@ void smblib_usb_plugin_hard_reset_locked(struct smb_charger *chg)
 				__pm_stay_awake(&chg->chg_wake_lock);
 				chg->chg_wake_lock_on = true;
 			} else {
-				pr_err("chg_wake_lock is already stay awake.");
+				pr_debug("chg_wake_lock is already stay awake.");
 			}
 		} else {
 			if (chg->chg_wake_lock_on) {
@@ -5620,7 +5620,7 @@ void smblib_usb_plugin_hard_reset_locked(struct smb_charger *chg)
 				__pm_relax(&chg->chg_wake_lock);
 				chg->chg_wake_lock_on = false;
 			} else {
-				pr_err("chg_wake_lock is already relax.");
+				pr_debug("chg_wake_lock is already relax.");
 			}
 		}
 	}
@@ -5696,7 +5696,7 @@ void smblib_usb_plugin_locked(struct smb_charger *chg)
 				__pm_stay_awake(&chg->chg_wake_lock);
 				chg->chg_wake_lock_on = true;
 			} else {
-				pr_err("chg_wake_lock is already stay awake.");
+				pr_debug("chg_wake_lock is already stay awake.");
 			}
 		} else {
 			if (chg->chg_wake_lock_on) {
@@ -5704,7 +5704,7 @@ void smblib_usb_plugin_locked(struct smb_charger *chg)
 				__pm_relax(&chg->chg_wake_lock);
 				chg->chg_wake_lock_on = false;
 			} else {
-				pr_err("chg_wake_lock is already relax.");
+				pr_debug("chg_wake_lock is already relax.");
 			}
 		}
 	}
