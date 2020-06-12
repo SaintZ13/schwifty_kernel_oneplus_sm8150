@@ -4409,20 +4409,18 @@ void dsi_panel_put_mode(struct dsi_display_mode *mode)
 }
 
 void dsi_panel_calc_dsi_transfer_time(struct dsi_host_common_cfg *config,
-			struct dsi_mode_info *timing)
+			struct dsi_display_mode *mode, u32 frame_threshold_us)
 {
 	u32 frame_time_us, nslices;
 	u64 min_bitclk, total_active_pixels, bits_per_line,
 		dsi_transfer_time_us;
-	struct msm_display_dsc_info *dsc = timing->dsc;
+	struct msm_display_dsc_info *dsc = mode->timing.dsc;
+	struct dsi_mode_info *timing = &mode->timing;
 
 	/* Packet overlead in bits,2 bytes header + 2 bytes checksum
 	 * + 1 byte dcs data command.
 	 */
 	const u32 packet_overhead = 56;
-
-	/* Default time between pingpong done to TE in microsecs */
-	const u32 max_tx_threshold_time = 2166;
 
 	frame_time_us = mult_frac(1000, 1000, (timing->refresh_rate));
 
@@ -4453,9 +4451,12 @@ void dsi_panel_calc_dsi_transfer_time(struct dsi_host_common_cfg *config,
 		dsi_transfer_time_us = frame_time_us * min_bitclk;
 		do_div(dsi_transfer_time_us, timing->clk_rate_hz);
 		timing->dsi_transfer_time_us = dsi_transfer_time_us;
+	} else if (mode->priv_info->mdp_transfer_time_us) {
+		timing->dsi_transfer_time_us =
+			mode->priv_info->mdp_transfer_time_us;
 	} else {
 		timing->dsi_transfer_time_us = frame_time_us -
-				max_tx_threshold_time;
+				frame_threshold_us;
 	}
 }
 
