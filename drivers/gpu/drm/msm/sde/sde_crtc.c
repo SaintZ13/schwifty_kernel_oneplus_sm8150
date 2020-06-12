@@ -4271,7 +4271,7 @@ static void sde_crtc_atomic_begin(struct drm_crtc *crtc,
 	 * nothing else needs to be done.
 	 */
 	if (unlikely(!sde_crtc->num_mixers))
-		goto end;
+		return;
 
 	_sde_crtc_blend_setup(crtc, old_state, true);
 	_sde_crtc_dest_scaler_setup(crtc);
@@ -5952,7 +5952,7 @@ static int sde_crtc_onscreenfinger_atomic_check(struct sde_crtc_state *cstate,
 					SDE_ATRACE_END("aod_layer_hid");
 				}
 			}
-		
+
 			if (fp_index >= 0)
 				cstate->fingerprint_mode = true;
 			else

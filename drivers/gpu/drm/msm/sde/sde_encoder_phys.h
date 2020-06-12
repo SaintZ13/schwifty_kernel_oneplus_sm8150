@@ -384,7 +384,6 @@ struct sde_encoder_phys_cmd_autorefresh {
  * @autorefresh: autorefresh feature state
  * @pending_vblank_cnt: Atomic counter tracking pending wait for VBLANK
  * @pending_vblank_wq: Wait queue for blocking until VBLANK received
- * @wr_ptr_wait_success: log wr_ptr_wait success for release fence trigger
  */
 struct sde_encoder_phys_cmd {
 	struct sde_encoder_phys base;
@@ -393,7 +392,6 @@ struct sde_encoder_phys_cmd {
 	struct sde_encoder_phys_cmd_autorefresh autorefresh;
 	atomic_t pending_vblank_cnt;
 	wait_queue_head_t pending_vblank_wq;
-	bool wr_ptr_wait_success;
 };
 
 /**
