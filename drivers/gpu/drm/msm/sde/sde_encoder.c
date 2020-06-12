@@ -3656,8 +3656,7 @@ static void sde_encoder_frame_done_callback(
 
 		/* One of the physical encoders has become idle */
 		for (i = 0; i < sde_enc->num_phys_encs; i++) {
-			if ((sde_enc->phys_encs[i] == ready_phys) ||
-				(event & SDE_ENCODER_FRAME_EVENT_ERROR)) {
+			if (sde_enc->phys_encs[i] == ready_phys) {
 				SDE_EVT32_VERBOSE(DRMID(drm_enc), i,
 					atomic_read(
 						&sde_enc->frame_done_cnt[i]));
