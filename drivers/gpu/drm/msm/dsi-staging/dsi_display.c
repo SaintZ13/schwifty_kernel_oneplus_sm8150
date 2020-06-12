@@ -1098,7 +1098,7 @@ static int dsi_display_status_reg_read(struct dsi_display *display)
 		if (rc <= 0)
 			pr_err("rx cmd transfer failed rc=%d\n", rc);
 		rc = dsi_panel_tx_cmd_set_op(panel, DSI_CMD_READ_SAMSUNG_PANEL_REGISTER_OFF);
-		
+
 		memcpy(temp_buffer_2, cmds2->msg.rx_buf, 1);
 		memset(buf, 0, sizeof(buf));
 
@@ -1115,7 +1115,7 @@ static int dsi_display_status_reg_read(struct dsi_display *display)
 		if (rc <= 0)
 			pr_err("rx cmd transfer failed rc=%d\n", rc);
 		rc = dsi_panel_tx_cmd_set_op(panel, DSI_CMD_READ_SAMSUNG_PANEL_REGISTER_OFF);
-				
+
 		memcpy(temp_buffer_3, cmds3->msg.rx_buf, 1);
 
 		rc = dsi_panel_tx_cmd_set_op(panel, DSI_CMD_READ_SAMSUNG_PANEL_REGISTER_ON);
@@ -1131,10 +1131,10 @@ static int dsi_display_status_reg_read(struct dsi_display *display)
 		if (rc <= 0)
 			pr_err("rx cmd transfer failed rc=%d\n", rc);
 		rc = dsi_panel_tx_cmd_set_op(panel, DSI_CMD_READ_SAMSUNG_PANEL_REGISTER_OFF);
-				
+
 		memcpy(temp_buffer_4, cmds4->msg.rx_buf, 1);
 		memset(buf, 0, sizeof(buf));
-		
+
 		rc = dsi_panel_tx_cmd_set_op(panel, DSI_CMD_READ_SAMSUNG_PANEL_REGISTER_ON);
 		cmds5 = mode->priv_info->cmd_sets[DSI_CMD_SET_PANEL_ID5].cmds;
 		if (cmds5->last_command) {
@@ -1148,7 +1148,7 @@ static int dsi_display_status_reg_read(struct dsi_display *display)
 		if (rc <= 0)
 			pr_err("rx cmd transfer failed rc=%d\n", rc);
 		rc = dsi_panel_tx_cmd_set_op(panel, DSI_CMD_READ_SAMSUNG_PANEL_REGISTER_OFF);
-						
+
 		memcpy(temp_buffer_5, cmds5->msg.rx_buf, 2);
 		memset(buf, 0, sizeof(buf));
 
@@ -1165,7 +1165,7 @@ static int dsi_display_status_reg_read(struct dsi_display *display)
 		if (rc <= 0)
 			pr_err("rx cmd transfer failed rc=%d\n", rc);
 		rc = dsi_panel_tx_cmd_set_op(panel, DSI_CMD_READ_SAMSUNG_PANEL_REGISTER_OFF);
-						
+
 		memcpy(temp_buffer_6, cmds6->msg.rx_buf, 16);
 		memset(buf, 0, sizeof(buf));
 
@@ -1184,7 +1184,7 @@ static int dsi_display_status_reg_read(struct dsi_display *display)
 		if (rc <= 0)
 			pr_err("rx cmd transfer failed rc=%d\n", rc);
 		rc = dsi_panel_tx_cmd_set_op(panel, DSI_CMD_READ_SAMSUNG_PANEL_REGISTER_OFF);
-								
+
 		memcpy(temp_buffer_7, cmds7->msg.rx_buf, 34);
 
 		if((temp_buffer_6[0] !=0x80) && (temp_buffer_2[0] != 0x80)) {
@@ -7138,7 +7138,7 @@ int dsi_display_get_modes(struct dsi_display *display,
 		if (is_cmd_mode) {
 			dsi_panel_calc_dsi_transfer_time(
 				&display->panel->host_config,
-				&display_mode, frame_threshold_us);
+				&display_mode.timing);
 			display_mode.priv_info->dsi_transfer_time_us =
 				display_mode.timing.dsi_transfer_time_us;
 			display_mode.priv_info->min_dsi_clk_hz =
