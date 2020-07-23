@@ -3632,7 +3632,7 @@ static void sde_encoder_frame_done_callback(
 {
 	struct sde_encoder_virt *sde_enc = to_sde_encoder_virt(drm_enc);
 	unsigned int i;
-	bool trigger = true;
+	bool trigger = true, is_cmd_mode;
 	enum sde_rm_topology_name topology = SDE_RM_TOPOLOGY_NONE;
 
 	if (!drm_enc || !sde_enc->cur_master) {
@@ -3649,7 +3649,7 @@ static void sde_encoder_frame_done_callback(
 
 	if (event & (SDE_ENCODER_FRAME_EVENT_DONE
 			| SDE_ENCODER_FRAME_EVENT_ERROR
-			| SDE_ENCODER_FRAME_EVENT_PANEL_DEAD)) {
+			| SDE_ENCODER_FRAME_EVENT_PANEL_DEAD) && is_cmd_mode) {
 		if (ready_phys->connector)
 			topology = sde_connector_get_topology_name(
 							ready_phys->connector);
