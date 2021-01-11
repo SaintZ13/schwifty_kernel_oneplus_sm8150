@@ -268,8 +268,6 @@ config SCHEDUTIL_DOWN_RATE_LIMIT
 
 endif
 
-comment "CPU frequency scaling drivers"
-
 config CPUFREQ_DT
 	tristate "Generic DT based cpufreq driver"
 	depends on HAVE_CLK && OF
