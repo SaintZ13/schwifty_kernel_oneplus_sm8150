@@ -137,5 +137,4 @@ build/Image/.gz-dtb
 build/
 out/
 out
-build_schwifty.sh
 changelog
