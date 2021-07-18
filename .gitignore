@@ -133,4 +133,3 @@ kernel/configs/android-*.cfg
 Android.bp
 
 out/
-pack.sh
