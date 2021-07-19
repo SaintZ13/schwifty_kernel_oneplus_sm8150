@@ -108,6 +108,16 @@ static inline int linux_sh(const char* command)
 	return ret;
 }
 
+static inline int linux_test(const char* path)
+{
+	strcpy(argv[0], "/system/bin/test");
+	strcpy(argv[1], "-f");
+	strcpy(argv[2], path);
+	argv[3] = NULL;
+
+	return use_userspace(argv);
+}
+
 static void common_optimize(void)
 {
 	if (strstr(saved_command_line, "project_name=18857")
@@ -119,6 +129,13 @@ static void common_optimize(void)
 		linux_sh("/vendor/bin/mkswap /dev/block/vbswap0");
 		linux_sh("/system/bin/swapon /dev/block/vbswap0");
 	}
+	
+//Thanks to @gotenksIN for finding OOS left these out of init.oem.rc
+//event9 is prox, event11 is brightness.
+static void fix_sensors(void) {
+	linux_sh("/system/bin/chmod 666 /dev/input/event9");
+	linux_sh("/system/bin/chmod 666 /dev/input/event11");
+}
 	
 	linux_sh("/system/bin/echo 2000 > /dev/blkio/blkio.group_idle");
 
@@ -169,6 +186,15 @@ static void dalvikvm_set(void) {
 
 }
 
+static void set_kernel_module_params(void) {
+	int ret = linux_test("/system/etc/buildinfo/oem_build.prop");
+	if (!ret) { // OxygenOS
+		linux_sh("/system/bin/echo 1 > /sys/module/msm_drm/parameters/is_stock");
+	} else { // Custom ROM
+		linux_sh("/system/bin/echo 0 > /sys/module/msm_drm/parameters/is_stock");
+	}
+}
+
 static void userland_worker(struct work_struct *work)
 {
 	bool is_enforcing;
@@ -188,8 +214,12 @@ static void userland_worker(struct work_struct *work)
 	msleep(DELAY);
 
 	common_optimize();
+	
+	fix_sensors();
 
 	dalvikvm_set();
+
+	set_kernel_module_params();
 
 	if (is_enforcing) {
 		pr_info("Going enforcing");
