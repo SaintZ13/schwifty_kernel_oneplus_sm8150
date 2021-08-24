@@ -85,7 +85,6 @@ static int    fresh_rate_report_enable = 0;
 static bool   fresh_rate_input_dev_init = false;
 
 #define to_dsi_bridge(x)  container_of((x), struct dsi_bridge, base)
-static unsigned int cur_refresh_rate = 60;
 
 static void dsi_display_mask_ctrl_error_interrupts(struct dsi_display *display,
 			u32 mask, bool enable)
