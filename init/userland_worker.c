@@ -130,13 +130,6 @@ static void common_optimize(void)
 		linux_sh("/system/bin/swapon /dev/block/vbswap0");
 	}
 	
-//Thanks to @gotenksIN for finding OOS left these out of init.oem.rc
-//event9 is prox, event11 is brightness.
-static void fix_sensors(void) {
-	linux_sh("/system/bin/chmod 666 /dev/input/event9");
-	linux_sh("/system/bin/chmod 666 /dev/input/event11");
-}
-	
 	linux_sh("/system/bin/echo 2000 > /dev/blkio/blkio.group_idle");
 
 	linux_sh("/system/bin/echo 262144 > /proc/sys/net/core/rmem_max");
@@ -157,6 +150,13 @@ static void fix_sensors(void) {
 		linux_write("ro.lmk.swap_util_max", "100", true);
 		linux_write("ro.lmk.swap_free_low_percentage", "20", true);
 	}
+}
+
+//Thanks to @gotenksIN for finding OOS left these out of init.oem.rc
+//event9 is prox, event11 is brightness.
+static void fix_sensors(void) {
+	linux_sh("/system/bin/chmod 666 /dev/input/event9");
+	linux_sh("/system/bin/chmod 666 /dev/input/event11");
 }
 
 static void dalvikvm_set(void) {
