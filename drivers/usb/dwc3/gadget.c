@@ -1261,16 +1261,8 @@ static u32 dwc3_calc_trbs_left(struct dwc3_ep *dep)
 	 * more transfers in our ring.
 	 */
 	if (dep->trb_enqueue == dep->trb_dequeue) {
-<<<<<<< HEAD
-		/*
-		 * If there is any request remained in the started_list at
-		 * this point, that means there is no TRB available.
-		 */
-		if (!list_empty(&dep->started_list))
-=======
 		tmp = dwc3_ep_prev_trb(dep, dep->trb_enqueue);
 		if (!tmp || tmp->ctrl & DWC3_TRB_CTRL_HWO)
->>>>>>> 3f9054750c0fceed721cc3bdec1f366d8e71c20f
 			return 0;
 
 		return DWC3_TRB_NUM - 1;
@@ -2347,16 +2339,11 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
 
 		ret = wait_for_completion_timeout(&dwc->ep0_in_setup,
 				msecs_to_jiffies(DWC3_PULL_UP_TIMEOUT));
-<<<<<<< HEAD
-		if (ret == 0)
-			dev_warn(dwc->dev, "timed out waiting for SETUP phase\n");
-=======
 		if (ret == 0) {
 			dev_err(dwc->dev, "timed out waiting for SETUP phase\n");
 			dbg_event(0xFF, "Pullup timeout put",
 				atomic_read(&dwc->dev->power.usage_count));
 		}
->>>>>>> 3f9054750c0fceed721cc3bdec1f366d8e71c20f
 	}
 
 	disable_irq(dwc->irq);
