@@ -4308,7 +4308,6 @@ static void sde_crtc_atomic_begin(struct drm_crtc *crtc,
 	 * in command mode.
 	 */
 
-end:
 	SDE_ATRACE_END("crtc_atomic_begin");
 }
 
